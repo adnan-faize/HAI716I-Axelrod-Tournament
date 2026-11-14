@@ -1,8 +1,5 @@
 #include <cstdlib>
-#include <cstdint>
-
 #include <iostream>
-
 #include <getopt.h>
 
 #include "include/shared/config.hpp"
@@ -33,24 +30,32 @@ const struct option long_options[] = {
 
 void help() {
     std::cout << "Usage : ./tournament <command> [options]" << std::endl;
-    std::cout << "" << std::endl;
-    std::cout << "Commands : " << std::endl;
-    std::cout << "" << std::endl;
-    std::cout << "Options : " << std::endl;
+    std::cout << "                                        " << std::endl;
+    std::cout << "Commands :                              " << std::endl;
+    std::cout << "                                        " << std::endl;
+    std::cout << "Options :                               " << std::endl;
     std::cout << "  -s, --seed <value>    Random seed for reproductibility" << std::endl;
     std::cout << "  -r, --rounds <value>  Number of rounds for ea" << std::endl;
     std::cout << "  -m, --matches <value>  Number of matches per pair" << std::endl;
     std::cout << "  -n, --noise <value>      Noise probability (default : 0.05 for step_3-noise)" << std::endl;
-    std::cout << "  -p, --prob <value> " << std::endl;
-    std::cout << "  -N,  --no-self-play  " << std::endl;
+    std::cout << "  -p, --prob <value>                  " << std::endl;
+    std::cout << "  -N,  --no-self-play                 " << std::endl;
     std::cout << "  -h, --help    Show this help message" << std::endl;
-    std::cout << "" <<std::endl;
-    std::cout << "Example : " << std::endl;
-    std::cout << "  ./tournament ..." << std::endl;
+    std::cout << "                                      " << std::endl;
+    std::cout << "Example :                             " << std::endl;
+    std::cout << "  ./tournament ...                    " << std::endl;
+}
+
+void cmd_help(const Command& cmd) {
+    std::cout << "Command : " << cmd.name << std::endl;
+    std::cout << "  " << cmd.description << std::endl;
+    std::cout << "" << std::endl;
+    help();
 }
 
 int main(int argc, char** argv) {
     Config cfg;
+    bool want_help = false;
 
     int opt;
     int option_index = 0;
@@ -58,20 +63,29 @@ int main(int argc, char** argv) {
     while ((opt = getopt_long(argc, argv, short_options, long_options, &option_index)) != -1) {
         switch (opt) {
             case 's': cfg.seed    = std::stoull(optarg); break;
-            case 'r': cfg.rounds  = std::stoul(optarg); break;
-            case 'm': cfg.matches = std::stoul(optarg); break;
-            case 'n': cfg.noise   = std::atof(optarg); break;
-            case 'p': cfg.prob    = std::atof(optarg); break;
-            case 'N': break; // TODO
-            case 'h':
-                help();
-                return EXIT_SUCCESS;
-            case '?': [[fallthrough]];
-            default:
-                help();
-                return EXIT_FAILURE;
+            case 'r': cfg.rounds  = std::stoul(optarg);  break;
+            case 'm': cfg.matches = std::stoul(optarg);  break;
+            case 'n': cfg.noise   = std::atof(optarg);   break;
+            case 'p': cfg.prob    = std::atof(optarg);   break;
+            case 'N': /* TODO */                         break;
+            case 'h': want_help = true;                  break;
+            case '?':                          [[fallthrough]];
+            default: help();               return EXIT_FAILURE;
         }
     }
 
-    return EXIT_SUCCESS;
+    // no command given or only --help
+    if (optind >= argc) { help(); return want_help ? EXIT_SUCCESS : EXIT_FAILURE; }
+
+    std::string_view command_name = argv[optind];
+    for (const Command& cmd : commands) {
+        if (cmd.name == command_name) {
+            if (want_help) { cmd_help(cmd); return EXIT_SUCCESS; }
+            return cmd.fn(cfg);
+        }
+    }
+
+    std::cerr << "Error : unknown command '" << command_name << "'." << std::endl;
+    help();
+    return EXIT_FAILURE;
 }
