@@ -64,7 +64,7 @@ void help() {
 }
 
 void cmd_help(const Command& cmd) {
-    std::cout << "Command : " << cmd.name << std::endl;
+    std::cout << "Command : " << cmd.display_name << std::endl;
     std::cout << "  " << cmd.description << std::endl;
     std::cout << "" << std::endl;
     help();
