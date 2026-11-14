@@ -1,19 +1,30 @@
 #include <cstdlib>
 #include <iostream>
+#include <string_view>
 #include <getopt.h>
 
 #include "include/shared/config.hpp"
 #include "include/commands/step_1.hpp"
-
+#include "include/commands/step_2.hpp"
+#include "include/commands/step_3_gains.hpp"
+#include "include/commands/step_3_horizon.hpp"
+#include "include/commands/step_3_noise.hpp"
+#include "include/commands/step_3_selection.hpp"
 
 struct Command {
     std::string_view name;
+    std::string_view display_name;
     int (*fn)(const Config&);
     std::string_view description;
 };
 
 const struct Command commands[] = {
-    { "step1", run_step_1, "Tournoi de base" },
+    { "step1"          , "Step 1"                , run_step_1          , "Tournoi de base" },
+    { "step2"          , "Step 2"                , run_step_2          , "Tournoi de base" },
+    { "step3-noise"    , "Step 3 Noise"          , run_step_3_noise    , "Tournoi de base" },
+    { "step3-horizon"  , "Step 3 Unknown Horizon", run_step_3_horizon  , "Tournoi de base" },
+    { "step3-selection", "Step 3 Selection"      , run_step_3_selection, "Tournoi de base" },
+    { "step3-gains"    , "Step 3 Other Gains"    , run_step_3_gains    , "Tournoi de base" },
 };
 
 const char* short_options = "s:r:m:n:p:Nh";
@@ -32,6 +43,12 @@ void help() {
     std::cout << "Usage : ./tournament <command> [options]" << std::endl;
     std::cout << "                                        " << std::endl;
     std::cout << "Commands :                              " << std::endl;
+    std::cout << "  step1             Step 1 : Base tournament                             " << std::endl;
+    std::cout << "  step2             Step 2 : Base tournament                             " << std::endl;
+    std::cout << "  step3-bruit       Step 3 : Modification 1 - Noise                            " << std::endl;
+    std::cout << "  step3-horizon     Step 3 : Modification 2 - Unknown horizon                            " << std::endl;
+    std::cout << "  step3-selection   Step 3 : Modification 3 - Selection                             " << std::endl;
+    std::cout << "  step3-gains       Step 3 : Modification 4 - Other gains                            " << std::endl;
     std::cout << "                                        " << std::endl;
     std::cout << "Options :                               " << std::endl;
     std::cout << "  -s, --seed <value>    Random seed for reproductibility" << std::endl;
