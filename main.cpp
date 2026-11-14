@@ -5,13 +5,9 @@
 
 #include <getopt.h>
 
-struct Config {
-    uint64_t seed = 42;
-    uint32_t rounds = 200;
-    uint32_t matches = 5;
-    double noise = 0.05;
-    double prob = 0.995;
-};
+#include "include/shared/config.hpp"
+#include "include/commands/step_1.hpp"
+
 
 struct Command {
     std::string_view name;
@@ -19,19 +15,20 @@ struct Command {
     std::string_view description;
 };
 
-int cmd_step1 (const Config&);
-
 const struct Command commands[] = {
-    { "step1", cmd_step1, "Tournoi de base" },
+    { "step1", run_step_1, "Tournoi de base" },
 };
 
-const char* short_options = "s:r:m:n:p:h";
+const char* short_options = "s:r:m:n:p:Nh";
 const struct option long_options[] = {
-    { "seed" , required_argument, nullptr, 's'},
-    { "rounds", required_argument, nullptr, 'r'},
-    { "matches", required_argument, nullptr, 'm'},
-    { "help" , no_argument, nullptr, 'h' },
-    { nullptr, 0          , nullptr, 0 }
+    { "seed"        , required_argument, nullptr, 's' },
+    { "rounds"      , required_argument, nullptr, 'r' },
+    { "matches"     , required_argument, nullptr, 'm' },
+    { "noise"       , required_argument, nullptr, 'n' },
+    { "prob"        , required_argument, nullptr, 'p' },
+    { "no-self-play", required_argument, nullptr, 'N' },
+    { "help"        , no_argument      , nullptr, 'h' },
+    { nullptr       , 0                , nullptr, 0   }
 };
 
 void help() {
@@ -60,19 +57,18 @@ int main(int argc, char** argv) {
 
     while ((opt = getopt_long(argc, argv, short_options, long_options, &option_index)) != -1) {
         switch (opt) {
-            case 's': break;
-            case 'r': break;
-            case 'm': break;
-            case 'n': break;
-            case 'p': break;
-            case 'N': break;
+            case 's': cfg.seed    = std::stoull(optarg); break;
+            case 'r': cfg.rounds  = std::stoul(optarg); break;
+            case 'm': cfg.matches = std::stoul(optarg); break;
+            case 'n': cfg.noise   = std::atof(optarg); break;
+            case 'p': cfg.prob    = std::atof(optarg); break;
+            case 'N': break; // TODO
             case 'h':
                 help();
                 return EXIT_SUCCESS;
-            case '?':
-                return EXIT_FAILURE;
+            case '?': [[fallthrough]];
             default:
-                std::cerr << "" << std::endl;
+                help();
                 return EXIT_FAILURE;
         }
     }

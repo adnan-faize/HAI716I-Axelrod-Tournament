@@ -5,6 +5,18 @@
 #set document(author: "Adnan FAIZE", title: "Journal de Bord")
 #set par(justify: true, leading: 0.52em);
 
+#set heading(numbering: "1.1")
+#show heading: it => {
+  if it.numbering != none {
+    numbering(it.numbering, ..counter(heading).at(it.location()))
+    h(1em)
+    it.body
+  } else {
+    it.body
+  }
+  v(0.5em)
+}
+
 #set page(
   numbering: "1",
   number-align: center,
