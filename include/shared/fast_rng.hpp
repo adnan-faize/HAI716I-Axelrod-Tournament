@@ -26,8 +26,8 @@ class FastRng {
         uint64_t next_u64() {
             state += A_MAGIC;
             uint64_t z = state;
-            z = (z ^ (z >> 30)) * B_MAGIC;
-            z = (z ^ (z >> 27)) * C_MAGIC;
+            z = (z ^ (z >> 30)) * A_MAGIC;
+            z = (z ^ (z >> 27)) * B_MAGIC;
             return z ^ (z >> 31);
         }
 
