@@ -191,10 +191,20 @@ L'ajout de `FRIEDMAN` et `PAVLOV` lors de l'étape 2 augmente la densité coopé
 == Modification nº1 : Bruit à 5%
 
 === Prédictions
-
+Probabilité d'inversion accidentelle par coup : $5%$. Probabilité qu'un match de 200 tours se déroule sans erreur : $P = (1 - 0.05)^(400) approx 1.3 times 10^(-9)$. L'occurrence d'erreurs est quasi-certaine. `FRIEDMAN` (Grim Trigger) doit basculer en défection permanente dès la première erreur. `PAVLOV` doit limiter la perte de points grâce à son mécanisme d'auto-correction en 2 pas.
 
 === Analyse des Résultats
+L'introduction du bruit entraîne l'effondrement de `FRIEDMAN`, dont le taux de coopération chute de $44.4\%$ à $7.6\%$ : la moindre inversion accidentelle ($C \to D$) la verrouille en effet dans une défection permanente. À l'inverse, cette instabilité propulse `ALL-D` à la première place ($17 547$ points), son insensibilité totale aux perturbations lui évitant de subir la pénalité de dupe ($S=0$).
 
+#figure(
+  grid(
+    columns: (1fr, 1fr),
+    gutter: 8pt,
+    [ #csv("data/step3_noise_rankings.csv") ],
+    [ #image("assets/step3_noise_rankings.svg") ]
+  ),
+  caption: ""
+)
 
 == Modification nº2 : Horizon Inconnu
 
