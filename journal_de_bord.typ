@@ -121,9 +121,9 @@
 #v(1fr)
 
 #align(center)[
-  #block(width: 80%)[
+  #block(width: 70%)[
     #text(size: 11pt, weight: "medium", fill: luma(60))[
-      *Résumé :* Ce journal de bord décrit la conception, l'implémentation en C++20 et les tests d'un simulateur du dilemme du prisonnier selon les protocoles de Robert Axelrod (1980). Le simulateur confronte dix stratégies issues de la théorie des jeux et des systèmes multi-agents. Les expériences couvrent six régimes : un tournoi initial à cinq stratégies, une population à dix stratégies, un bruit de transmission de 5 % et un horizon probabiliste ($w=0.995$). Elles évaluent aussi la sélection par dynamique des réplicateurs sur cinquante générations et deux matrices de gains alternatives (Poule Mouillée et Chasse au Cerf). Le système exporte automatiquement les résultats en fichiers CSV, les importe dans ce document et les affiche sous forme de graphiques SVG. L'analyse détermine les conditions de domination de TIT-FOR-TAT et mesure l'effet de la composition écologique de la population.
+      *Résumé :* Ce journal de bord décrit la conception, l'implémentation en C++20 et les tests d'un simulateur du dilemme du prisonnier selon les protocoles de Robert Axelrod (1980). Le simulateur confronte sept stratégies issues de la théorie des jeux et des systèmes multi-agents. Les expériences couvrent six régimes : un tournoi initial à cinq stratégies, une population à sept stratégies, un bruit de transmission de 5 % et un horizon probabiliste ($w=0.995$). Elles évaluent aussi la sélection par dynamique des réplicateurs sur cinquante générations et deux matrices de gains alternatives (Poule Mouillée et Chasse au Cerf). Le système peut exporter les résultats en fichiers CSV, les importe dans ce document et les affiche sous forme de graphiques SVG. L'analyse détermine les conditions de domination de `TIT-FOR-TAT` et mesure l'effet de la composition écologique de la population.
     ]
   ]
 ]
