@@ -21,7 +21,7 @@ inline std::string TitForTatStrategy::name() const {
 }
 
 inline std::string TitForTatStrategy::description() const {
-    return "";
+    return "Commence par Coopérer puis imite le coup précédent de l'adversaire";
 }
 
 inline std::string TitForTatStrategy::expected_behavior() const {
