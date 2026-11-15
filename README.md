@@ -112,10 +112,8 @@ Vous pouvez moduler les paramètres globaux via les options en ligne de commande
 
 ## Tests Unitaires
 
-Une suite de tests unitaires intégrée valide la conformité du PRNG et les comportements décisionnels clés (pardon de Gladstein Tester, rancune de Friedman, règle de Pavlov, tolérance de TFTT) :
-
 ```bash
 ./tournoi test
 ```
 
-Résultat : 8 / 8 tests validés avec succès. (Hopefully)
+Une suite de tests aurait voulu être faite mais a été reportée par manque de temps. La commande reste présente car prévue à la base.
