@@ -4,6 +4,7 @@
 #include <getopt.h>
 
 #include "include/shared/config.hpp"
+#include "include/output/console_output.hpp"
 #include "include/strategies/strategies.hpp"
 #include "include/commands/step_1.hpp"
 #include "include/commands/step_2.hpp"
