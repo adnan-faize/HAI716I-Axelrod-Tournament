@@ -8,4 +8,6 @@ struct Config {
     uint32_t matches = 5;
     double noise = 0.05;
     double prob = 0.995;
+    bool self_play = true;
+    bool export_csv = false;
 };
