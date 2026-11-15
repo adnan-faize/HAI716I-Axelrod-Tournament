@@ -185,9 +185,9 @@ Cet écart avec le tournoi historique de 1980 s'explique d'abord par la structur
   [ #image("assets/step1_rankings.svg") ]
 )
 
-Par ailleurs, `ALL-D` tire un avantage décisif de `RANDOM` en exploitant chaque coopération ($T=5$), ce qui lui rapporte $715.0$ points par match ($3.575$ points/tour), tandis que `TIT-FOR-TAT` subit ce jeu erratique et plafonne à $499.4$ points. Le Self-Play joue alors un rôle compensateur essentiel : face à son propre clone, `TIT-FOR-TAT` engrange $3 000$ points ($5 times 600$) contre seulement $2 000$ pour `ALL-D` ($5 times 400$). Sans ce bonus de $+1 000$ points pour neutraliser les gains d'`ALL-D` sur `RANDOM`, la stratégie prédatrice prend la tête du classement.
-
 #render-csv-table("data/step1_head_to_head.csv")
+
+Par ailleurs, `ALL-D` tire un avantage décisif de `RANDOM` en exploitant chaque coopération ($T=5$), ce qui lui rapporte $715.0$ points par match ($3.575$ points/tour), tandis que `TIT-FOR-TAT` subit ce jeu erratique et plafonne à $499.4$ points. Le Self-Play joue alors un rôle compensateur essentiel : face à son propre clone, `TIT-FOR-TAT` engrange $3 000$ points ($5 times 600$) contre seulement $2 000$ pour `ALL-D` ($5 times 400$). Sans ce bonus de $+1 000$ points pour neutraliser les gains d'`ALL-D` sur `RANDOM`, la stratégie prédatrice prend la tête du classement.
 
 Ainsi, la performance d'une stratégie n'est jamais absolue ; elle demeure étroitement conditionnée par la distribution écologique de la population adverse.
 
@@ -227,40 +227,66 @@ L'introduction du bruit entraîne l'effondrement de `FRIEDMAN`, dont le taux de 
   [ #image("assets/step3_noise_rankings.svg") ]
 )
 
-== Modification nº2 : Horizon Inconnu
+== Modification nº2 : Horizon Inconnu ($w=0.995$)
 
 === Prédictions
 Durée moyenne théorique : $bb(E)[T] = 1 / (1 - w) = 200$ tours. Théorème d'Axelrod-Hamilton : la coopération est stable si $w > (T-R)/(T-P) = (5-3)/(5-2) = 2/3 approx 0.667$. Le paramètre $0.995$ dépasse ce seuil critique. Les coopérateurs doivent dominer et l'induction à rebours du dernier coup est éliminée.
 
 === Analyse des Résultats
-
+La métrique normalisée par tour (`Moy/Tour`) confirme que `FRIEDMAN` ($2.768$) et `TIT-FOR-TAT` ($2.592$) dominent le classement. L'absence d'un tour final déterminé supprime l'induction à rebours et stabilise la coopération mutuelle.
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 8pt,
+  [ #render-csv-table("data/step3_horizon_rankings.csv") ],
+  [ #image("assets/step3_horizon_rankings.svg") ]
+)
 
 == Modification nº3 : Dynamique Évolutionnaire
 
 === Prédictions
-Modèle discret de Taylor-Jonker : $x_i(t+1) = x_i(t) dot f_i(t) / macron(f)(t)$. Prédiction en 3 phases : 1. Extinction rapide de `RANDOM` ; 2. Déclin progressif d'ALL-D et JOSS privées de cibles ; 3. Domination des stratégies coopératrices (`TIT-FOR-TAT`, `FRIEDMAN`, `PAVLOV`) et convergence du fitness moyen vers 600.
+1. Extinction rapide de `RANDOM`
+2. Déclin progressif d'ALL-D et JOSS privées de cibles
+3. Domination des stratégies coopératrices (`TIT-FOR-TAT`, `FRIEDMAN`, `PAVLOV`) et convergence du fitness moyen vers 600.
 
 === Analyse des Résultats
-
+Les résultats valident expérimentalement la sélection des profils coopératifs : les stratégies prédatrices ou erratiques (ALL-D, RANDOM et JOSS) disparaissent complètement ($0.0\%$), tandis que la population se stabilise à plus de $99.9\%$ autour de TIT-FOR-TAT ($51.85\%$), FRIEDMAN ($30.36\%$) et PAVLOV ($17.75\%$). Cette convergence fait progresser la fitness moyenne de $481.90$ à $599.93$, rejoignant ainsi l'optimum de Pareto.
+#align(center+horizon)[
+  #image("assets/step3_evolution.svg", width:70%)
+]
+#render-evolution-table("data/step3_selection_evolution.csv")
 
 == Modification nº4 : Matrices de Gains Alternatives
+
+=== Poule Mouillée ($T > R > S > P$, $P=0$)
+*Prédiction :* La collision ($D,D=0$) est plus coûteuse que la dupe ($S=1$). La défection systématique d'ALL-D doit s'effondrer.
 #grid(
   columns: (1fr, 1fr),
   gutter: 8pt,
   [
-    *Prédiction :* La collision ($D,D=0$) est plus coûteuse que la dupe ($S=1$). La défection systématique d'ALL-D doit s'effondrer.
-    #image("assets/step3_chicken_rankings.svg")
     #render-csv-table("data/step3_chicken_rankings.csv")
-    *Résultat :* Chute d'ALL-D au 7e rang ($5\,225$ pts). Victoire de `PAVLOV` ($15\,667$ pts) et `TIT-FOR-TAT` ($14\,813$ pts).
   ],
   [
-    *Prédiction :* La défection unilatérale n'est plus incitative ($T=3 < R=4$). La coopération mutuelle maximise le gain individuel.
-    #image("assets/step3_stag_rankings.svg")
-    #render-csv-table("data/step3_stag_rankings.csv")
-    *Résultat :* Domination des coopérateurs : `TIT-FOR-TAT` 1ère ($22\,211$ pts), `FRIEDMAN` 2e ($20\,518$ pts), `PAVLOV` 3e ($18\,628$ pts).
+    #image("assets/step3_chicken_rankings.svg")
   ]
 )
+*Résultat :* Chute d'ALL-D au 7e rang ($5 225$ pts). Victoire de `PAVLOV` ($15 667$ pts) et `TIT-FOR-TAT` ($14 813$ pts).
 
+=== Chasse au cerf ($R > T > P > S$, $R=4, T=3$)
+*Prédiction :* La défection unilatérale n'est plus incitative ($T=3 < R=4$). La coopération mutuelle maximise le gain individuel.
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 8pt,
+  [
+    #render-csv-table("data/step3_stag_rankings.csv")
+  ],
+  [
+    #image("assets/step3_stag_rankings.svg")
+  ]
+)
+*Résultat :* Domination des coopérateurs : `TIT-FOR-TAT` 1ère ($22 211$ pts), `FRIEDMAN` 2e ($20 518$ pts), `PAVLOV` 3e ($18 628$ pts).
 
 = Conclusion
 Cette étude démontre que la coopération constitue une propriété écologique émergente plutôt qu'un optimum moral individuel. Si la défection systématique prend temporairement l'avantage face aux perturbateurs d'une population agressive, l'atteinte d'un seuil suffisant de stratégies conditionnelles réciproques permet à la coopération mutuelle de s'imposer et de résister aux invasions. Enfin, face au bruit environnemental, la dissuasion sans pardon (`FRIEDMAN`) échoue, tandis que l'auto-correction réactive (`PAVLOV`) confère une robustesse évolutive supérieure.
+
+= Utilisation des IAg dans ce projet
+Dans le cadre de ce projet, j'ai utilisé l'IA générative de Google, Gemini, à trois étapes clés. Elle m'a d'abord permis de générer le code destiné à produire les données et les images (regroupé dans le dossier `include/output/`). Après avoir écrit une première base de code pour structurer le projet, je lui ai également soumis mon approche afin d'en identifier les points faibles et d'y remédier. Enfin, vers la fin, je lui ai fait relire mon travail, corriger certaines erreurs de code, éliminer les fautes d'orthographe et améliorer la clarté rédactionnelle de mes textes.
