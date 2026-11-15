@@ -9,3 +9,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 include_directories(include)
 add_executable(tournoi main.cpp)
+
+enable_testing()
+add_test(NAME UnitTests COMMAND tournoi test)

@@ -84,9 +84,9 @@
 #v(1fr)
 
 #align(center)[
-  #block(width: 75%)[
+  #block(width: 80%)[
     #text(size: 11pt, weight: "medium", fill: luma(60))[
-      *Résumé :* Ce journal de bord documente la conception, l'implémentation en C++20 et l'expérimentation d'un simulateur de tournois pour le dilemme du prisonnier, suivant les protocoles fondateurs de Robert Axelrod (1980). Le système confronte dix stratégies issues de la théorie des jeux et des systèmes multi-agents sous divers régimes environnementaux : tournoi initial de base à cinq stratégies, population enrichie à dix stratégies, présence de bruit de transmission (5%), horizon temporel probabiliste ($w=0.995$), sélection naturelle par dynamique des réplicateurs sur cinquante générations, et matrices de gains alternatives (Poule Mouillée et Chasse au Cerf). Les résultats sont automatiquement consolidés sous forme de jeux de données CSV importés dans ce document et visualisés par graphiques vectoriels SVG. Une analyse rigoureuse répond à la question centrale du sujet relative à la domination conditionnelle de TIT-FOR-TAT et à l'impact critique de la composition écologique de la population.
+      *Résumé :* Ce journal de bord décrit la conception, l'implémentation en C++20 et les tests d'un simulateur du dilemme du prisonnier selon les protocoles de Robert Axelrod (1980). Le simulateur confronte dix stratégies issues de la théorie des jeux et des systèmes multi-agents. Les expériences couvrent six régimes : un tournoi initial à cinq stratégies, une population à dix stratégies, un bruit de transmission de 5 % et un horizon probabiliste ($w=0.995$). Elles évaluent aussi la sélection par dynamique des réplicateurs sur cinquante générations et deux matrices de gains alternatives (Poule Mouillée et Chasse au Cerf). Le système exporte automatiquement les résultats en fichiers CSV, les importe dans ce document et les affiche sous forme de graphiques SVG. L'analyse détermine les conditions de domination de TIT-FOR-TAT et mesure l'effet de la composition écologique de la population.
     ]
   ]
 ]
@@ -105,9 +105,16 @@
 
 == Problématique et Objectifs
 
+
+
 == Spécification des Paramètres Expérimentaux
 
-#pagebreak()
+Le protocole applique les règles formelles du premier tournoi de Robert Axelrod (1980) :
+- Nombre de tours par math ($T = 200$) : Horizon déterministe fixe. permet d'amortir la phase de test initiale et d'observer le régime stationnaire.
+- Nombre de répétitions par pair ($M = 5$) : Réduit la variance statistique causée par les stratégies stochastiques (`RANDOM`, `JOSS`) et par le canal bruité.
+- Matrice de Gains standard : $T=5.0, R=3.0, P=2.0, S=0.0$. Respecte strictement les deux conditions théoriques : $T > R > P > S$ ($5 > 3 > 2 > 0$) et $2R > T + S$ ($6 > 5$).
+- Générateur pseudo-aléatoire (PRNG) : Algorithme SplitMix64 64-bit déterministe (graine = `42`). Assure une reproductibilité bit-à-bit stricte des tirages.
+- Régime de confrontation : Exécution en round-robin incluant les confrontations clone (self-play). Le mode sans clone est disponible via l'option `--no-self-play`.
 
 = Fiches des Stratégies
 
@@ -138,9 +145,9 @@ Stratégie pivot des folk theorems théorisée par James W. Friedman (1971) qui 
 === PAVLOV (Win-Stay, Lose-Shift)
 Formalisée par Nowak et Sigmund (Nature, 1993), elle débute par $C$ et maintient son coup uniquement après un gain satisfaisant ($C,C$ ou $D,C$), ce qui lui permet de corriger les erreurs accidentelles tout en exploitant les coopérateurs inconditionnels.
 
-#pagebreak()
-
 = Étape 1 : Le Tournoi de Base
+
+
 
 = Étape 2 : Population Élargie
 

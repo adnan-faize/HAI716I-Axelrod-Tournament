@@ -36,7 +36,7 @@ const struct Command commands[] = {
     { "test"             , "Tests Unitaires"       , run_tests           , "Éxécute la suite de tests unitaires"                                                                                           },
 };
 
-const char* short_options = "s:r:m:n:p:cNh";
+const char* short_options = "s:r:m:n:p:caNh";
 const struct option long_options[] = {
     { "seed"        , required_argument, nullptr, 's' },
     { "rounds"      , required_argument, nullptr, 'r' },
@@ -44,6 +44,7 @@ const struct option long_options[] = {
     { "bruit"       , required_argument, nullptr, 'b' },
     { "prob"        , required_argument, nullptr, 'p' },
     { "csv"         , no_argument      , nullptr, 'c' },
+    { "allow-sgv"   , no_argument      , nullptr, 'a' },
     { "no-self-play", no_argument      , nullptr, 'N' },
     { "help"        , no_argument      , nullptr, 'h' },
     { nullptr       , 0                , nullptr, 0   }
@@ -73,6 +74,8 @@ void help() {
     std::cout << "  -m, --matches <value>  Nombre de parties par paire (défaut : 5)                                                                                               " << std::endl;
     std::cout << "  -b, --bruit <value>    Probabilité de bruit (défaut : 0.05 pour step3-noise)                                                                                  " << std::endl;
     std::cout << "  -p, --prob <value>     Probabilité w de continuation (défaut : 0.995 pour step3-horizon)                                                                      " << std::endl;
+    std::cout << "  -c, --csv              Génère des fichiers csv avec les données des tournois                                                                                  " << std::endl;
+    std::cout << "  -a, --allow-svg        Génère des tableaux svg avec les données des tournois                                                                                  " << std::endl;
     std::cout << "  -N,  --no-self-play    Désactive les matchs d'une stratégie contre son propre clone                                                                           " << std::endl;
     std::cout << "  -h, --help             Affiche cette aide détaillée                                                                                                           " << std::endl;
     std::cout << "                                                                                                                                                                " << std::endl;
@@ -129,6 +132,7 @@ int main(int argc, char** argv) {
             case 'n': cfg.noise      = std::stod(optarg);   break;
             case 'p': cfg.prob       = std::stod(optarg);   break;
             case 'c': cfg.export_csv = true;                break;
+            case 'a': cfg.export_svg = true;                break;
             case 'N': cfg.self_play  = false;               break;
             case 'h': want_help      = true;                break;
             case '?':                             [[fallthrough]];

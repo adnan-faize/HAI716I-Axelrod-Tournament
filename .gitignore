@@ -1,3 +1,5 @@
-bin/    # executable files (tournament)
-cmake/  # generated cmake files to build the project
-data/   # export data folder created by the executable
+bin/
+cmake/
+data/
+build/
+assets/

@@ -10,4 +10,5 @@ struct Config {
     double prob = 0.995;
     bool self_play = true;
     bool export_csv = false;
+    bool export_svg = false;
 };
