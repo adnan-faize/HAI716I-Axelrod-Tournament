@@ -24,3 +24,4 @@ class Strategy {
 
         virtual std::unique_ptr<Strategy> clone() const = 0;
 };
+
