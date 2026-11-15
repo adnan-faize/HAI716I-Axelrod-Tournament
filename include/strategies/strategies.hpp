@@ -12,9 +12,6 @@
 
 #include "../strategies/friedman_strategy.hpp"
 #include "../strategies/pavlov_strategy.hpp"
-#include "../strategies/tit_for_two_tats_strategy.hpp"
-#include "../strategies/suspicious_tit_for_tat_strategy.hpp"
-#include "../strategies/generous_tit_for_tat_strategy.hpp"
 
 inline std::vector<std::unique_ptr<Strategy>> get_base_strategies() {
     std::vector<std::unique_ptr<Strategy>> vec;
@@ -28,6 +25,7 @@ inline std::vector<std::unique_ptr<Strategy>> get_base_strategies() {
 
 inline std::vector<std::unique_ptr<Strategy>> get_extended_strategies() {
     std::vector<std::unique_ptr<Strategy>> vec = get_base_strategies();
-    // vec.push_back(std::make_unique<AllDStrategy>());k
+    vec.push_back(std::make_unique<FriedmanStrategy>());
+    vec.push_back(std::make_unique<PavlovStrategy>());
     return vec;
 }
