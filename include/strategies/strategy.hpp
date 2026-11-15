@@ -16,6 +16,7 @@ class Strategy {
 
         virtual std::string name() const = 0;
         virtual std::string description() const = 0;
+        virtual std::string author_origin() const = 0;
         virtual std::string expected_behavior() const = 0;
 
         virtual void reset() {}
@@ -24,4 +25,3 @@ class Strategy {
 
         virtual std::unique_ptr<Strategy> clone() const = 0;
 };
-

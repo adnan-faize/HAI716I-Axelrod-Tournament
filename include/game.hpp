@@ -1,11 +1,29 @@
 #pragma once
 
 #include <string_view>
+#include <iostream>
 
 enum class Move : char {
     C = 'C', // Coopérer
     D = 'D', // Trahir
 };
+
+inline Move invert(Move m) {
+    return (m == Move::C) ? Move::D : Move::C;
+}
+
+inline bool is_cooperation(Move m) {
+    return m == Move::C;
+}
+
+inline char to_char(Move m) {
+    return static_cast<char>(m);
+}
+
+inline std::ostream& operator<<(std::ostream& os, Move m) {
+    os << to_char(m);
+    return os;
+}
 
 /**
  * @brief Gains Matrix 2x2

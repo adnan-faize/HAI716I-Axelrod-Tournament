@@ -21,8 +21,8 @@ inline std::vector<std::unique_ptr<Strategy>> get_base_strategies() {
     vec.push_back(std::make_unique<AllDStrategy>());
     vec.push_back(std::make_unique<RandomStrategy>());
     vec.push_back(std::make_unique<TitForTatStrategy>());
-    // vec.push_back(std::make_unique<TesterStrategy>());
-    // vec.push_back(std::make_unique<JossStrategy>());
+    vec.push_back(std::make_unique<TesterStrategy>());
+    vec.push_back(std::make_unique<JossStrategy>());
     return vec;
 }
 

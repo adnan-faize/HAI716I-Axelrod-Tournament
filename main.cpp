@@ -89,6 +89,30 @@ void cmd_help(const Command& cmd) {
     help();
 }
 
+int run_strats(const Config&) {
+    auto all_strategies = get_extended_strategies();
+    ConsoleOutput::print_strategies_info(all_strategies);
+    return EXIT_SUCCESS;
+}
+
+int run_all(const Config& cfg) {
+    ConsoleOutput::print_banner("EXÉCUTION COMPLÈTE DE TOUTES LES ÉTAPES DU PROJET");
+    run_step_1(cfg);
+    run_step_2(cfg);
+    run_step_3_noise(cfg);
+    run_step_3_horizon(cfg);
+    run_step_3_selection(cfg);
+    run_step_3_gains(cfg);
+    return EXIT_SUCCESS;
+}
+
+int run_tests(const Config&) {
+    int passed = 0;
+    int total  = 0;
+
+    return (passed == total) ? EXIT_SUCCESS : EXIT_FAILURE;
+}
+
 int main(int argc, char** argv) {
     Config cfg;
     bool want_help = false;

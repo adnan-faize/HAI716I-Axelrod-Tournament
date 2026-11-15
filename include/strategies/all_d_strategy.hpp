@@ -9,6 +9,7 @@ class AllDStrategy : public Strategy {
     public:
         std::string name() const override;
         std::string description() const override;
+        std::string author_origin() const override;
         std::string expected_behavior() const override;
 
         Move choose(const std::vector<Move>&, const std::vector<Move>&, FastRng&) override;
@@ -22,6 +23,10 @@ inline std::string AllDStrategy::name() const {
 
 inline std::string AllDStrategy::description() const {
     return "Joue trahir (D) à chaque tour.";
+}
+
+inline std::string AllDStrategy::author_origin() const {
+    return "";
 }
 
 inline std::string AllDStrategy::expected_behavior() const {
