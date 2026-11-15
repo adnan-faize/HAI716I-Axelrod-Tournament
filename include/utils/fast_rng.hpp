@@ -16,15 +16,15 @@ class FastRng {
         uint64_t state;
     public:
         explicit FastRng(uint64_t seed) {
-
+            set_seed(seed);
         }
 
         void set_seed(uint64_t seed) {
-            state = (seed == 0 ? A_MAGIC : seed);
+            state = (seed == 0 ? WEYL_VALUE : seed);
         }
 
         uint64_t next_u64() {
-            state += A_MAGIC;
+            state += WEYL_VALUE;
             uint64_t z = state;
             z = (z ^ (z >> 30)) * A_MAGIC;
             z = (z ^ (z >> 27)) * B_MAGIC;
