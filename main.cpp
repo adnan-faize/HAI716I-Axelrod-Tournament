@@ -32,7 +32,7 @@ const struct Command commands[] = {
     { "etape-3-evolution", "Étape 3 : Évolution"   , run_step_3_selection, "Modification : Le tournoi est rejoué sur plusieurs généraions ; la part de chaque stratégie dans la population suit son score" },
     { "etape-3-gains"    , "Étape 3 : Autres Gains", run_step_3_gains    , "Modification : La matrice change ; soit elle reste un dilemme, soit elle devient un autre jeu 2x2 de la section 07 du cours"   },
     { "strategies"       , "Fiches des Stratégies" , run_strats          , "Affiche les fiches descriptives détaillées de chaque stratégie"                                                                },
-    { "tout"             , "Toutes les Étapes"     , run_all             , "Exécute toutes les étapes successivement"                                                                                      },
+    { "all"              , "Toutes les Étapes"     , run_all             , "Exécute toutes les étapes successivement"                                                                                      },
     { "test"             , "Tests Unitaires"       , run_tests           , "Éxécute la suite de tests unitaires"                                                                                           },
 };
 

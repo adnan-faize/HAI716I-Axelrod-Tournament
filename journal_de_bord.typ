@@ -44,6 +44,43 @@
   },
 )
 
+#let render-csv-table(csv-path, caption: none, max-rows: none, columns: auto, text-size: 5.8pt, inset: 2pt) = {
+  let data = csv(csv-path)
+  let headers = data.at(0)
+  let rows = data.slice(1)
+  if max-rows != none { rows = rows.slice(0, max-rows) }
+  let cols = if columns != auto { columns } else { (auto,) * headers.len() }
+
+  figure(
+    caption: caption,
+    table(
+      columns: cols,
+      inset: inset,
+      table.header(..headers.map(h => text(size: text-size, weight: "bold")[#h])),
+      ..rows.flatten().map(cell => text(size: text-size)[#cell])
+    )
+  )
+}
+
+#let render-evolution-table(csv-path, caption: none, columns: auto, text-size: 5.2pt, inset: 1.8pt) = {
+  let data = csv(csv-path)
+  let headers = data.at(0)
+  let rows = data.slice(1)
+  let key-gens = ("0", "5", "10", "20", "35", "50")
+  let selected = rows.filter(r => key-gens.contains(r.at(0)))
+  let cols = if columns != auto { columns } else { (auto,) * headers.len() }
+
+  figure(
+    caption: caption,
+    table(
+      columns: cols,
+      inset: inset,
+      table.header(..headers.map(h => text(size: text-size, weight: "bold")[#h])),
+      ..selected.flatten().map(cell => text(size: text-size)[#cell])
+    )
+  )
+}
+
 #block[
   #box(height: IMAGE_BOX_MAX_WIDTH, width: IMAGE_BOX_MAX_WIDTH)[
     #align(start + horizon)[
@@ -134,31 +171,25 @@ Le tournoi met en scène dix stratégies formalisées en classes C++20 dérivant
 = Étape 1 : Le Tournoi de Base
 
 == Prédictions
-Dans une population restreinte aux 5 stratégies du cours, `TIT-FOR-TAT` est l'unique stratégie coopératrice initiale. Sans coalition coopératrice, `ALL-D` exploitera massivement les défections aléatoires de `RANDOM` ($T=5$). `TIT-FOR-TAT` ne pourra compenser son retard face à `ALL-D` que grâce aux points acquis contre son clone en *Self-Play* ($5 times 600 = 3 000$ pts vs $2 000$ pour `ALL-D`). Sans self-play, `ALL-D` est sûrement vainqueur.
+Dans une population restreinte aux 5 stratégies du cours, `TIT-FOR-TAT` est l'unique stratégie coopératrice initiale. Sans coalition coopératrice, `ALL-D` exploitera massivement les défections aléatoires de `RANDOM` ($T=5$). `TIT-FOR-TAT` ne pourra compenser son retard face à `ALL-D` que grâce aux points acquis contre son clone en Self-Play ($5 times 600 = 3 000$ pts vs $2 000$ pour `ALL-D`). Sans self-play, `ALL-D` est sûrement vainqueur.
 
 == Analyse des Résultats
-La victoire de `TIT-FOR-TAT` dépend directement de l'activation du mode *Self-Play*. Avec la configuration par défaut d'Axelrod, `TIT-FOR-TAT` se classe au premier rang avec $12 551.0$ points, devant `TESTER` ($12 537.0$) et `ALL-D` ($11 620.0$). En revanche, sans *Self-Play* (`--no-self-play`), elle rétrograde à la troisième place ($9 548.0$ points), devancée par `ALL-D` ($9 620.0$) et `TESTER` ($9 551.0$).
+La victoire de `TIT-FOR-TAT` dépend directement de l'activation du mode Self-Play. Avec la configuration par défaut d'Axelrod, `TIT-FOR-TAT` se classe au premier rang avec $12 551.0$ points, devant `TESTER` ($12 537.0$) et `ALL-D` ($11 620.0$). En revanche, sans Self-Play (`--no-self-play`), elle rétrograde à la troisième place ($9 548.0$ points), devancée par `ALL-D` ($9 620.0$) et `TESTER` ($9 551.0$).
 
 Cet écart avec le tournoi historique de 1980 s'explique d'abord par la structure écologique de la population. En 1980, la compétition réunissait quatorze stratégies, dont huit coopératrices initiales : `TIT-FOR-TAT` cumulait alors $600$ points face à chacune d'elles, formant une coalition dominante. À l'inverse, dans notre environnement restreint à cinq stratégies, `TIT-FOR-TAT` est l'unique coopératrice initiale face à des profils hostiles (`ALL-D` trahit toujours, `RANDOM` à $50\%$, `JOSS` à $10\%$ et `TESTER` dès le premier tour).
 
-Par ailleurs, `ALL-D` tire un avantage décisif de `RANDOM` en exploitant chaque coopération ($T=5$), ce qui lui rapporte $715.0$ points par match ($3.575$ points/tour), tandis que `TIT-FOR-TAT` subit ce jeu erratique et plafonne à $499.4$ points. Le *Self-Play* joue alors un rôle compensateur essentiel : face à son propre clone, `TIT-FOR-TAT` engrange $3 000$ points ($5 times 600$) contre seulement $2 000$ pour `ALL-D` ($5 times 400$). Sans ce bonus de $+1 000$ points pour neutraliser les gains d'`ALL-D` sur `RANDOM`, la stratégie prédatrice prend la tête du classement.
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 8pt,
+  [ #render-csv-table("data/step1_rankings.csv") ],
+  [ #image("assets/step1_rankings.svg") ]
+)
+
+Par ailleurs, `ALL-D` tire un avantage décisif de `RANDOM` en exploitant chaque coopération ($T=5$), ce qui lui rapporte $715.0$ points par match ($3.575$ points/tour), tandis que `TIT-FOR-TAT` subit ce jeu erratique et plafonne à $499.4$ points. Le Self-Play joue alors un rôle compensateur essentiel : face à son propre clone, `TIT-FOR-TAT` engrange $3 000$ points ($5 times 600$) contre seulement $2 000$ pour `ALL-D` ($5 times 400$). Sans ce bonus de $+1 000$ points pour neutraliser les gains d'`ALL-D` sur `RANDOM`, la stratégie prédatrice prend la tête du classement.
+
+#render-csv-table("data/step1_head_to_head.csv")
 
 Ainsi, la performance d'une stratégie n'est jamais absolue ; elle demeure étroitement conditionnée par la distribution écologique de la population adverse.
-
-#figure(
-  grid(
-    columns: (1fr, 1fr),
-    gutter: 8pt,
-    [ #csv("data/step1_rankings.csv") ],
-    [ #image("assets/step1_rankings.svg") ]
-  ),
-  caption: ""
-)
-
-#figure(
-  [ #csv("data/step1_head_to_head.csv") ],
-  caption: ""
-)
 
 = Étape 2 : Population Élargie
 
@@ -168,23 +199,16 @@ L'adjonction de deux stratégies coopératrices supplémentaires (`FRIEDMAN` et 
 == Analyse des Résultats
 L'ajout de `FRIEDMAN` et `PAVLOV` lors de l'étape 2 augmente la densité coopérative de la population et crée une masse critique favorable aux échanges mutuels. Grâce à cette synergie, `TIT-FOR-TAT` conserve solidement le premier rang avec $18 580.0$ points, suivie de près par `FRIEDMAN` en deuxième position ($18 563.0$ points).
 
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 8pt,
+  [ #render-csv-table("data/step2_rankings.csv") ],
+  [ #image("assets/step2_rankings.svg") ]
+)
+
+#render-csv-table("data/step2_head_to_head.csv")
+
 À l'inverse, les profils prédateurs et instables perdent d'avantage. Incapable de coopérer avec `FRIEDMAN` et `PAVLOV`, `ALL-D` est limité au gain de punition $P=2$ ($403$ points par match) et recule à la troisième place, ses profits face à `RANDOM` ne suffisant plus à compenser ce déficit. Parallèlement, `JOSS` (6e) et `RANDOM` (7e) régressent, lourdement sanctionnées par les ripostes systématiques de `TIT-FOR-TAT` et de `FRIEDMAN`.
-
-#figure(
-  grid(
-    columns: (1fr, 1fr),
-    gutter: 8pt,
-    [ #csv("data/step2_rankings.csv") ],
-    [ #image("assets/step2_rankings.svg") ]
-  ),
-  caption: ""
-)
-
-#figure(
-  [ #csv("data/step2_head_to_head.csv") ],
-  caption: ""
-)
-
 
 = Étape 3 : Modifications du Tournoi
 
@@ -196,20 +220,17 @@ Probabilité d'inversion accidentelle par coup : $5%$. Probabilité qu'un match 
 === Analyse des Résultats
 L'introduction du bruit entraîne l'effondrement de `FRIEDMAN`, dont le taux de coopération chute de $44.4\%$ à $7.6\%$ : la moindre inversion accidentelle ($C \to D$) la verrouille en effet dans une défection permanente. À l'inverse, cette instabilité propulse `ALL-D` à la première place ($17 547$ points), son insensibilité totale aux perturbations lui évitant de subir la pénalité de dupe ($S=0$).
 
-#figure(
-  grid(
-    columns: (1fr, 1fr),
-    gutter: 8pt,
-    [ #csv("data/step3_noise_rankings.csv") ],
-    [ #image("assets/step3_noise_rankings.svg") ]
-  ),
-  caption: ""
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 8pt,
+  [ #render-csv-table("data/step3_noise_rankings.csv") ],
+  [ #image("assets/step3_noise_rankings.svg") ]
 )
 
 == Modification nº2 : Horizon Inconnu
 
 === Prédictions
-
+Durée moyenne théorique : $bb(E)[T] = 1 / (1 - w) = 200$ tours. Théorème d'Axelrod-Hamilton : la coopération est stable si $w > (T-R)/(T-P) = (5-3)/(5-2) = 2/3 approx 0.667$. Le paramètre $0.995$ dépasse ce seuil critique. Les coopérateurs doivent dominer et l'induction à rebours du dernier coup est éliminée.
 
 === Analyse des Résultats
 
@@ -217,17 +238,29 @@ L'introduction du bruit entraîne l'effondrement de `FRIEDMAN`, dont le taux de 
 == Modification nº3 : Dynamique Évolutionnaire
 
 === Prédictions
-
+Modèle discret de Taylor-Jonker : $x_i(t+1) = x_i(t) dot f_i(t) / macron(f)(t)$. Prédiction en 3 phases : 1. Extinction rapide de `RANDOM` ; 2. Déclin progressif d'ALL-D et JOSS privées de cibles ; 3. Domination des stratégies coopératrices (`TIT-FOR-TAT`, `FRIEDMAN`, `PAVLOV`) et convergence du fitness moyen vers 600.
 
 === Analyse des Résultats
 
 
 == Modification nº4 : Matrices de Gains Alternatives
-
-=== Prédictions
-
-
-=== Analyse des Résultats
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 8pt,
+  [
+    *Prédiction :* La collision ($D,D=0$) est plus coûteuse que la dupe ($S=1$). La défection systématique d'ALL-D doit s'effondrer.
+    #image("assets/step3_chicken_rankings.svg")
+    #render-csv-table("data/step3_chicken_rankings.csv")
+    *Résultat :* Chute d'ALL-D au 7e rang ($5\,225$ pts). Victoire de `PAVLOV` ($15\,667$ pts) et `TIT-FOR-TAT` ($14\,813$ pts).
+  ],
+  [
+    *Prédiction :* La défection unilatérale n'est plus incitative ($T=3 < R=4$). La coopération mutuelle maximise le gain individuel.
+    #image("assets/step3_stag_rankings.svg")
+    #render-csv-table("data/step3_stag_rankings.csv")
+    *Résultat :* Domination des coopérateurs : `TIT-FOR-TAT` 1ère ($22\,211$ pts), `FRIEDMAN` 2e ($20\,518$ pts), `PAVLOV` 3e ($18\,628$ pts).
+  ]
+)
 
 
 = Conclusion
+Cette étude démontre que la coopération constitue une propriété écologique émergente plutôt qu'un optimum moral individuel. Si la défection systématique prend temporairement l'avantage face aux perturbateurs d'une population agressive, l'atteinte d'un seuil suffisant de stratégies conditionnelles réciproques permet à la coopération mutuelle de s'imposer et de résister aux invasions. Enfin, face au bruit environnemental, la dissuasion sans pardon (`FRIEDMAN`) échoue, tandis que l'auto-correction réactive (`PAVLOV`) confère une robustesse évolutive supérieure.

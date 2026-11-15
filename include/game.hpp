@@ -62,6 +62,16 @@ struct PayoffMatrix {
         return PayoffMatrix("Dilemme du Prisonnier sévère : T=3,R=0,P=6,S=1", 3, 0, 6, 1);
     }
 
+    // Chicken (T=5, R=3, S=1, P=0) (T > R > S > P)
+    static PayoffMatrix chicken() {
+        return PayoffMatrix("Jeu de la Poule Mouillee / Chicken : T=5, R=3, S=1, P=0", 3.0, 1.0, 5.0, 0.0);
+    }
+
+    // Stag Hunt (R=4, T=3, P=2, S=0) (R > T > P > S)
+    static PayoffMatrix stag_hunt() {
+        return PayoffMatrix("Chasse au Cerf / Stag Hunt : R=4, T=3, P=2, S=0", 4.0, 0.0, 3.0, 2.0);
+    }
+
     std::pair<double, double> payoffs(Move a, Move b) const;
 };
 
