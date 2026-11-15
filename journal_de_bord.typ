@@ -105,7 +105,9 @@
 
 == Problématique et Objectifs
 
+Cette étude examine comment une coopération rationnelle émerge et se stabilise entre des agents autonomes égoïstes sans autorité centrale. Elle vise à identifier les mécanismes algorithmiques (réciprocité, indulgence, réactivité) et les facteurs environnementaux (bruit, horizon temporel, dynamique populationnelle, matrices de rétribution) qui assurent une robustesse évolutive face aux prédateurs.
 
+Sur le plan opérationnel, le projet développe un simulateur orienté agents en C++20, modulaire, déterministe et conforme aux spécifications d'Axelrod (1980). Cet outil évalue sept stratégies (les cinq du cours complétées de Friedman et Pavlov) selon un protocole round-robin, puis éprouve leur résilience sous quatre régimes perturbés : canal bruité, horizon stochastique, réplicateurs et matrices modifiées. Enfin, la démarche impose de formuler des prédictions avant chaque simulation afin de valider les écarts entre la théorie et les résultats empiriques.
 
 == Spécification des Paramètres Expérimentaux
 
@@ -147,8 +149,52 @@ Formalisée par Nowak et Sigmund (Nature, 1993), elle débute par $C$ et maintie
 
 = Étape 1 : Le Tournoi de Base
 
+== Prédictions
+Dans une population restreinte aux 5 stratégies du cours, TIT-FOR-TAT est l'unique stratégie coopératrice initiale. Sans coalition coopératrice, ALL-D exploitera massivement les défections aléatoires de RANDOM ($T=5$). Prédiction formelle : TIT-FOR-TAT ne pourra compenser son retard face à ALL-D que grâce aux points acquis contre son clone en Self-Play ($5 times 600 = 3\,000$ pts vs $2\,000$ pour ALL-D). Sans self-play, ALL-D est prédite vainqueur.
+
+== Analyse des Résultats
 
 
 = Étape 2 : Population Élargie
 
+== Prédictions
+
+
+== Analyse des Résultats
+
+
 = Étape 3 : Modifications du Tournoi
+
+== Modification nº1 : Bruit à 5%
+
+=== Prédictions
+
+
+=== Analyse des Résultats
+
+
+== Modification nº2 : Horizon Inconnu
+
+=== Prédictions
+
+
+=== Analyse des Résultats
+
+
+== Modification nº3 : Dynamique Évolutionnaire
+
+=== Prédictions
+
+
+=== Analyse des Résultats
+
+
+== Modification nº4 : Matrices de Gains Alternatives
+
+=== Prédictions
+
+
+=== Analyse des Résultats
+
+
+= Conclusion
