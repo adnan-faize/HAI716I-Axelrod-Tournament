@@ -26,7 +26,7 @@ inline std::string RandomStrategy::description() const {
 }
 
 inline std::string RandomStrategy::author_origin() const {
-    return "";
+    return "Benchmark stochastique utilisé dès le premier tournoi d'Axelrod (1980).";
 }
 
 inline std::string RandomStrategy::expected_behavior() const {

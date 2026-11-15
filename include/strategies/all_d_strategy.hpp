@@ -26,7 +26,7 @@ inline std::string AllDStrategy::description() const {
 }
 
 inline std::string AllDStrategy::author_origin() const {
-    return "";
+    return "Classique de la théorie des jeux (stratégie dominante en jeu à un coup).";
 }
 
 inline std::string AllDStrategy::expected_behavior() const {

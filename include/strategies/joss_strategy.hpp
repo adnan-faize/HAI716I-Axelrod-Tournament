@@ -21,21 +21,24 @@ inline std::string JossStrategy::name() const {
 }
 
 inline std::string JossStrategy::description() const {
-    return "";
+    return "Joue TFT, mais trahit sournoisement avec 10% de probabilité au lieu de coopérer.";
 }
 
 
 inline std::string JossStrategy::author_origin() const {
-    return "";
+    return "Johann Joss, soumise au premier tournoi d'Axelrod (1980).";
 }
 
 
 inline std::string JossStrategy::expected_behavior() const {
-    return "";
+    return "Tente de grappiller des points face aux coopérateurs, mais déclenche des vendettas destructrices (cycles infinis d'alternance C/D ou D/D) face à TFT ou Friedman.";
 }
 
-inline Move JossStrategy::choose(const std::vector<Move>&, const std::vector<Move>& opponent, FastRng&) {
-
+inline Move JossStrategy::choose(const std::vector<Move>&, const std::vector<Move>& opponent, FastRng& rng) {
+    if (opponent.empty()) { return Move::C; }
+    Move last_opp = opponent.back();
+    if (last_opp == Move::D) { return Move::D; }
+    return rng.gen_bool(0.10) ? Move::D : Move::C;
 }
 
 inline std::unique_ptr<Strategy> JossStrategy::clone() const {

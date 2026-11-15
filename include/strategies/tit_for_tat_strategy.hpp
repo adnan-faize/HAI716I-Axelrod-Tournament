@@ -26,15 +26,16 @@ inline std::string TitForTatStrategy::description() const {
 }
 
 inline std::string TitForTatStrategy::author_origin() const {
-    return "";
+    return "Proposée par Anatol Rapoport, gagnante des tournois 1 et 2 d'Axelrod.";
 }
 
 inline std::string TitForTatStrategy::expected_behavior() const {
-    return "";
+    return "Excellente dans des populations coopératives grâce à sa gentillesse, sa capacité de représailles immédiates et son pardon rapide ; peut souffrir si l'environnement est dominé par des traîtres agressifs.";
 }
 
 inline Move TitForTatStrategy::choose(const std::vector<Move>&, const std::vector<Move>& opponent, FastRng&) {
-
+    if (opponent.empty()) { return Move::C; }
+    return opponent.back();
 }
 
 inline std::unique_ptr<Strategy> TitForTatStrategy::clone() const {

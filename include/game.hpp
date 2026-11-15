@@ -16,6 +16,10 @@ inline bool is_cooperation(Move m) {
     return m == Move::C;
 }
 
+inline bool is_defection(Move m) {
+    return m == Move::D;
+}
+
 inline char to_char(Move m) {
     return static_cast<char>(m);
 }
