@@ -150,10 +150,31 @@ Formalisée par Nowak et Sigmund (Nature, 1993), elle débute par $C$ et maintie
 = Étape 1 : Le Tournoi de Base
 
 == Prédictions
-Dans une population restreinte aux 5 stratégies du cours, TIT-FOR-TAT est l'unique stratégie coopératrice initiale. Sans coalition coopératrice, ALL-D exploitera massivement les défections aléatoires de RANDOM ($T=5$). Prédiction formelle : TIT-FOR-TAT ne pourra compenser son retard face à ALL-D que grâce aux points acquis contre son clone en Self-Play ($5 times 600 = 3\,000$ pts vs $2\,000$ pour ALL-D). Sans self-play, ALL-D est prédite vainqueur.
+Dans une population restreinte aux 5 stratégies du cours, `TIT-FOR-TAT` est l'unique stratégie coopératrice initiale. Sans coalition coopératrice, `ALL-D` exploitera massivement les défections aléatoires de `RANDOM` ($T=5$). `TIT-FOR-TAT` ne pourra compenser son retard face à `ALL-D` que grâce aux points acquis contre son clone en *Self-Play* ($5 times 600 = 3 000$ pts vs $2 000$ pour `ALL-D`). Sans self-play, `ALL-D` est sûrement vainqueur.
 
 == Analyse des Résultats
+La victoire de `TIT-FOR-TAT` dépend directement de l'activation du mode *Self-Play*. Avec la configuration par défaut d'Axelrod, `TIT-FOR-TAT` se classe au premier rang avec $12 551.0$ points, devant `TESTER` ($12 537.0$) et `ALL-D` ($11 620.0$). En revanche, sans *Self-Play* (`--no-self-play`), elle rétrograde à la troisième place ($9 548.0$ points), devancée par `ALL-D` ($9 620.0$) et `TESTER` ($9 551.0$).
 
+Cet écart avec le tournoi historique de 1980 s'explique d'abord par la structure écologique de la population. En 1980, la compétition réunissait quatorze stratégies, dont huit coopératrices initiales : `TIT-FOR-TAT` cumulait alors $600$ points face à chacune d'elles, formant une coalition dominante. À l'inverse, dans notre environnement restreint à cinq stratégies, `TIT-FOR-TAT` est l'unique coopératrice initiale face à des profils hostiles (`ALL-D` trahit toujours, `RANDOM` à $50\%$, `JOSS` à $10\%$ et `TESTER` dès le premier tour).
+
+Par ailleurs, `ALL-D` tire un avantage décisif de `RANDOM` en exploitant chaque coopération ($T=5$), ce qui lui rapporte $715.0$ points par match ($3.575$ points/tour), tandis que `TIT-FOR-TAT` subit ce jeu erratique et plafonne à $499.4$ points. Le *Self-Play* joue alors un rôle compensateur essentiel : face à son propre clone, `TIT-FOR-TAT` engrange $3 000$ points ($5 times 600$) contre seulement $2 000$ pour `ALL-D` ($5 times 400$). Sans ce bonus de $+1 000$ points pour neutraliser les gains d'`ALL-D` sur `RANDOM`, la stratégie prédatrice prend la tête du classement.
+
+Ainsi, la performance d'une stratégie n'est jamais absolue ; elle demeure étroitement conditionnée par la distribution écologique de la population adverse.
+
+#figure(
+  grid(
+    columns: (1fr, 1fr),
+    gutter: 8pt,
+    [ #csv("data/step1_rankings.csv") ],
+    [ #image("assets/step1_rankings.svg") ]
+  ),
+  caption: ""
+)
+
+#figure(
+  [ #csv("data/step1_head_to_head.csv") ],
+  caption: ""
+)
 
 = Étape 2 : Population Élargie
 
