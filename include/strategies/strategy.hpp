@@ -1,9 +1,11 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <vector>
 
 #include "../game.hpp"
+#include "../utils/fast_rng.hpp"
 
 /**
  * @brief Abstract class to implement the different strategies
@@ -18,6 +20,7 @@ class Strategy {
 
         virtual void reset() {}
 
-        virtual Move choose(const std::vector<Move>& history, const std::vector<Move>& opponent_history) = 0;
+        virtual Move choose(const std::vector<Move>& history, const std::vector<Move>& opponent_history, FastRng& rng) = 0;
 
+        virtual std::unique_ptr<Strategy> clone() const = 0;
 };
