@@ -179,9 +179,27 @@ Ainsi, la performance d'une stratégie n'est jamais absolue ; elle demeure étro
 = Étape 2 : Population Élargie
 
 == Prédictions
-
+L'adjonction de deux stratégies coopératrices supplémentaires (`FRIEDMAN` et `PAVLOV`) porte la densité d'agents bienveillants à $3/7$. `TIT-FOR-TAT` et `FRIEDMAN` doivent s'imposer en tête grâce à l'entraide mutuelle ($3.0$ pts/tour). La rentabilité relative d'`ALL-D` doit régresser, car elle sera contenue à $P=2$ (403 points par match) face à la majorité de ses adversaires.
 
 == Analyse des Résultats
+L'ajout de `FRIEDMAN` et `PAVLOV` lors de l'étape 2 augmente la densité coopérative de la population et crée une masse critique favorable aux échanges mutuels. Grâce à cette synergie, `TIT-FOR-TAT` conserve solidement le premier rang avec $18 580.0$ points, suivie de près par `FRIEDMAN` en deuxième position ($18 563.0$ points).
+
+À l'inverse, les profils prédateurs et instables perdent d'avantage. Incapable de coopérer avec `FRIEDMAN` et `PAVLOV`, `ALL-D` est limité au gain de punition $P=2$ ($403$ points par match) et recule à la troisième place, ses profits face à `RANDOM` ne suffisant plus à compenser ce déficit. Parallèlement, `JOSS` (6e) et `RANDOM` (7e) régressent, lourdement sanctionnées par les ripostes systématiques de `TIT-FOR-TAT` et de `FRIEDMAN`.
+
+#figure(
+  grid(
+    columns: (1fr, 1fr),
+    gutter: 8pt,
+    [ #csv("data/step2_rankings.csv") ],
+    [ #image("assets/step2_rankings.svg") ]
+  ),
+  caption: ""
+)
+
+#figure(
+  [ #csv("data/step2_head_to_head.csv") ],
+  caption: ""
+)
 
 
 = Étape 3 : Modifications du Tournoi
