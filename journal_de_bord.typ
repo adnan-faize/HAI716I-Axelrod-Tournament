@@ -104,13 +104,11 @@
 = Cadre et Protocole Expérimental
 
 == Problématique et Objectifs
-
 Cette étude examine comment une coopération rationnelle émerge et se stabilise entre des agents autonomes égoïstes sans autorité centrale. Elle vise à identifier les mécanismes algorithmiques (réciprocité, indulgence, réactivité) et les facteurs environnementaux (bruit, horizon temporel, dynamique populationnelle, matrices de rétribution) qui assurent une robustesse évolutive face aux prédateurs.
 
 Sur le plan opérationnel, le projet développe un simulateur orienté agents en C++20, modulaire, déterministe et conforme aux spécifications d'Axelrod (1980). Cet outil évalue sept stratégies (les cinq du cours complétées de Friedman et Pavlov) selon un protocole round-robin, puis éprouve leur résilience sous quatre régimes perturbés : canal bruité, horizon stochastique, réplicateurs et matrices modifiées. Enfin, la démarche impose de formuler des prédictions avant chaque simulation afin de valider les écarts entre la théorie et les résultats empiriques.
 
 == Spécification des Paramètres Expérimentaux
-
 Le protocole applique les règles formelles du premier tournoi de Robert Axelrod (1980) :
 - Nombre de tours par math ($T = 200$) : Horizon déterministe fixe. permet d'amortir la phase de test initiale et d'observer le régime stationnaire.
 - Nombre de répétitions par pair ($M = 5$) : Réduit la variance statistique causée par les stratégies stochastiques (`RANDOM`, `JOSS`) et par le canal bruité.
@@ -123,29 +121,15 @@ Le protocole applique les règles formelles du premier tournoi de Robert Axelrod
 Le tournoi met en scène dix stratégies formalisées en classes C++20 dérivant de l'interface abstraite pure `Strategy`.
 
 == Les 5 Stratégies de Base du Cours
-
-=== ALL-D (Toujours Trahir)
-Stratégie dominante de Nash (jeu statique) jouant toujours $D$ sans tenir compte de l'historique, elle exploite les profils naïfs ou désordonnés mais ne crée aucune valeur partagée, plafonnant à $bb(P)=2$ points face à elle-même ou aux stratégies punitives.
-
-=== RANDOM (Aléatoire Équiprobable)
-Ligne de base à entropie maximale introduite par Axelrod qui tire ses coups à pile ou face ($bb(P)(C) = bb(P)(D) = 0.5$), elle détruit la confiance des stratégies réactives et sert de manne financière ($T=5$) aux prédateurs opportunistes.
-
-=== TIT-FOR-TAT (Donnant-Donnant)
-Double vainqueur des tournois d'Axelrod conçu par Anatol Rapoport, elle joue $C$ au premier tour puis copie le coup adverse précédent, incarnant les quatre vertus d'Axelrod : bienveillance, riposte, indulgence et transparence.
-
-=== TESTER (David Gladstein)
-Soumise par David Gladstein au second tournoi d'Axelrod, elle sonde l'adversaire par $D$ au tour 1 : en cas de riposte, elle s'excuse ($C$) et adopte TIT-FOR-TAT (coopérant ensuite sur les 198 tours suivants face à elle), sinon elle l'exploite en alternant $D$ et $C$.
-
-=== JOSS (Johann Joss)
-Variante sournoise de TIT-FOR-TAT soumise par Johann Joss qui glisse une défection ($D$) avec une probabilité $p = 0.10$ après une coopération adverse, visant le gain de tentation $T=5$ au risque de déclencher des vendettas irréversibles.
+- ALL-D (Toujours Trahir) : Stratégie dominante de Nash (jeu statique) jouant toujours $D$ sans tenir compte de l'historique, elle exploite les profils naïfs ou désordonnés mais ne crée aucune valeur partagée, plafonnant à $bb(P)=2$ points face à elle-même ou aux stratégies punitives.
+- RANDOM (Aléatoire Équiprobable) : Ligne de base à entropie maximale introduite par Axelrod qui tire ses coups à pile ou face ($bb(P)(C) = bb(P)(D) = 0.5$), elle détruit la confiance des stratégies réactives et sert de manne financière ($T=5$) aux prédateurs opportunistes.
+- TIT-FOR-TAT (Donnant-Donnant) : Double vainqueur des tournois d'Axelrod conçu par Anatol Rapoport, elle joue $C$ au premier tour puis copie le coup adverse précédent, incarnant les quatre vertus d'Axelrod : bienveillance, riposte, indulgence et transparence.
+- TESTER (David Gladstein) : Soumise par David Gladstein au second tournoi d'Axelrod, elle sonde l'adversaire par $D$ au tour 1 : en cas de riposte, elle s'excuse ($C$) et adopte TIT-FOR-TAT (coopérant ensuite sur les 198 tours suivants face à elle), sinon elle l'exploite en alternant $D$ et $C$.
+- JOSS (Johann Joss) : Variante sournoise de TIT-FOR-TAT soumise par Johann Joss qui glisse une défection ($D$) avec une probabilité $p = 0.10$ après une coopération adverse, visant le gain de tentation $T=5$ au risque de déclencher des vendettas irréversibles.
 
 == Les 2 Stratégies Étendues de la Littérature
-
-=== FRIEDMAN (Rancunière)
-Stratégie pivot des folk theorems théorisée par James W. Friedman (1971) qui joue $C$ tant que l'autre coopère puis bascule définitivement sur $D$ à la moindre trahison, assurant une dissuasion maximale ($600$ points) mais critique face au moindre bruit.
-
-=== PAVLOV (Win-Stay, Lose-Shift)
-Formalisée par Nowak et Sigmund (Nature, 1993), elle débute par $C$ et maintient son coup uniquement après un gain satisfaisant ($C,C$ ou $D,C$), ce qui lui permet de corriger les erreurs accidentelles tout en exploitant les coopérateurs inconditionnels.
+- FRIEDMAN (Rancunière) : Stratégie pivot des folk theorems théorisée par James W. Friedman (1971) qui joue $C$ tant que l'autre coopère puis bascule définitivement sur $D$ à la moindre trahison, assurant une dissuasion maximale ($600$ points) mais critique face au moindre bruit.
+- PAVLOV (Win-Stay, Lose-Shift) : Formalisée par Nowak et Sigmund (Nature, 1993), elle débute par $C$ et maintient son coup uniquement après un gain satisfaisant ($C,C$ ou $D,C$), ce qui lui permet de corriger les erreurs accidentelles tout en exploitant les coopérateurs inconditionnels.
 
 = Étape 1 : Le Tournoi de Base
 
